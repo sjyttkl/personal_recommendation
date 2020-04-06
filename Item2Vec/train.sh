@@ -1,0 +1,1 @@
+train_file=../data/train_data.txt../bin/word2vec -train $train_file -output ../data/item_vec2.txt -size 128 -window 5 -sample 1e-3 -negative  -5 -hs 0 -binary 1 -cbow 0 -iter 100
