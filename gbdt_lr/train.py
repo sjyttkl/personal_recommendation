@@ -142,7 +142,7 @@ def train_tree_and_lr_model(train_file, feature_num_file, mix_tree_model_file, m
     total_feature_list = get_gbdt_and_lr_featrue(tree_leaf,tree_num,tree_depth)
 
     #逻辑回归
-    lr_clf = LRCV(Cs=[1.0], penalty="l2", tol=0.00001, max_iter=1000, cv=5, scoring='roc_auc').fit(train_feature,
+    lr_clf = LRCV(Cs=[1.0], penalty="l2", tol=0.00001, max_iter=1000, cv=5, scoring='roc_auc').fit(total_feature_list,
                                                                                                 train_label)
     scores = lr_clf.scores_.values()
     scores = list(scores)[0]  # 提取values值
