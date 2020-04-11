@@ -185,30 +185,30 @@ def add(str_one, str_two):
     return_list[index_one * list_two_len + index_two] = 1
     return ",".join([str(ele) for ele in return_list])
 
-
-def combine_feature(feature_one, feature_two, new_feature, train_data_df, test_data_df, feature_num_dict):
-    """
-    组合特征
-    :param feature_one:
-    :param feature_two:
-    :param new_feature:  组合特征的name
-    :param train_data_df:
-    :param test_data_df:
-    :param feature_num_dict: ndim of every feature,key feature name value len of the dim
-    :return: new_feature_num 新特征的维度
-    """
-
-    train_data_df[new_feature] = train_data_df.apply(lambda row: add(row[feature_one], row[feature_two]), axis=1)
-    test_data_df[new_feature] = test_data_df.apply(lambda row: add(row[feature_one], row[feature_two]), axis=1)
-
-    if feature_one not in feature_num_dict:
-        print("error")
-        sys.exit()
-    if feature_two not in feature_num_dict:
-        print("error")
-        sys.exit()
-
-    return feature_num_dict[feature_one] * feature_num_dict[feature_two]
+# 树模型，不需要对特征进行人工组合。
+# def combine_feature(feature_one, feature_two, new_feature, train_data_df, test_data_df, feature_num_dict):
+#     """
+#     组合特征
+#     :param feature_one:
+#     :param feature_two:
+#     :param new_feature:  组合特征的name
+#     :param train_data_df:
+#     :param test_data_df:
+#     :param feature_num_dict: ndim of every feature,key feature name value len of the dim
+#     :return: new_feature_num 新特征的维度
+#     """
+#
+#     train_data_df[new_feature] = train_data_df.apply(lambda row: add(row[feature_one], row[feature_two]), axis=1)
+#     test_data_df[new_feature] = test_data_df.apply(lambda row: add(row[feature_one], row[feature_two]), axis=1)
+#
+#     if feature_one not in feature_num_dict:
+#         print("error")
+#         sys.exit()
+#     if feature_two not in feature_num_dict:
+#         print("error")
+#         sys.exit()
+#
+#     return feature_num_dict[feature_one] * feature_num_dict[feature_two]
 
 
 if __name__ == "__main__":

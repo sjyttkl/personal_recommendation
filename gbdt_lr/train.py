@@ -76,7 +76,7 @@ def train_tree_model(train_file, feature_num_file, tree_model_file):
     train_mat = xgb.DMatrix(train_feature, train_label)
     # grid_search(train_mat) 参数选择，选择一次，就行，后面就无需继续使用了。
     tree_num = 10
-    tree_depth = 6
+    tree_depth = 4
     learning_rate = 0.3
     bst = train_tree_model_core(train_mat, tree_depth, tree_num, learning_rate)
 

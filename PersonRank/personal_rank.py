@@ -3,8 +3,8 @@
 """
 ==================================================
    File Name：     personal_rank.py
-   email:         songdongdong@jd.com
-   Author :       songdongdong
+   email:         695492835@qq.com
+   Author :       sjyttkl
    date：          2020/3/29
    Description :  https://blog.csdn.net/qq_35883464/article/details/92798854
 ==================================================
