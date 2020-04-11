@@ -184,5 +184,5 @@ if __name__ == "__main__":
     #     sys.exit()
 
 
-    train_tree_model("../data/gbdt_train_file", "../data/gbdt_feature_num", "../data/gbdt.model")
-    train_tree_and_lr_model("../data/gbdt_train_file", "../data/gbdt_feature_num", "../data/xgb_mix_model","../data/xgb_lr_coef_mix_model")
+    train_tree_model("data/gbdt_train_file", "data/gbdt_feature_num", "data/gbdt.model")
+    train_tree_and_lr_model("data/gbdt_train_file", "data/gbdt_feature_num", "data/xgb_mix_model","data/xgb_lr_coef_mix_model")
