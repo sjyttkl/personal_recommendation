@@ -41,8 +41,10 @@ def update_two_contribute_score(click_time_one, click_time_two):
 
 def cal_item_sim(user_click, user_click_time):
     """
+    这里返回的是商品之间的相似度，排序后的
     Args:
         user_click:dict ,key userid value [itemid1, itemid2]
+        user_click_time: userid_itemid: time
     Return:
         dict, key:itemid_i, value dict, value_key itemid_j, value_value simscore
     """
@@ -51,7 +53,7 @@ def cal_item_sim(user_click, user_click_time):
     for user, itemlist in user_click.items():
         for index_i in range(0, len(itemlist)):
             itemid_i = itemlist[index_i]
-            item_user_click_time.setdefault(itemid_i, 0)
+            item_user_click_time.setdefault(itemid_i, 0) #商品被点击的次数
             item_user_click_time[itemid_i] += 1
             for index_j in range(index_i + 1, len(itemlist)):
                 itemid_j = itemlist[index_j]
@@ -70,6 +72,7 @@ def cal_item_sim(user_click, user_click_time):
                 co_appear.setdefault(itemid_j, {})
                 co_appear[itemid_j].setdefault(itemid_i, 0)
                 co_appear[itemid_j][itemid_i] += update_two_contribute_score(click_time_one, click_time_two)
+                ##co_appear 保存的是两个商品被 点击的时间差矩阵
     item_sim_score = {}
     item_sim_score_sorted = {}
     for itemid_i, relate_item in co_appear.items():
@@ -81,7 +84,7 @@ def cal_item_sim(user_click, user_click_time):
     for itemid in item_sim_score:
         item_sim_score_sorted[itemid] = sorted(item_sim_score[itemid].items(), key = \
                                                 operator.itemgetter(1), reverse=True)
-    return item_sim_score_sorted
+    return item_sim_score_sorted #这里返回的是商品之间的相似度，排序后的
 
 
 def cal_recom_result(sim_info, user_click):
@@ -142,7 +145,7 @@ def debug_recomresult(recom_result, item_info):
     if user_id not in recom_result:
         print ("invalid result")
         return
-    for zuhe in sorted(recom_result[user_id].iteritems(), key = operator.itemgetter(1), reverse=True):
+    for zuhe in sorted(recom_result[user_id].items(), key = operator.itemgetter(1), reverse=True):
         itemid, score = zuhe
         if itemid not in item_info:
             continue
@@ -156,9 +159,10 @@ def main_flow():
     item_info = reader.get_item_info("../data/movies.txt")
     sim_info = cal_item_sim(user_click, user_click_time)
     debug_itemsim(item_info, sim_info)
-    #recom_result = cal_recom_result(sim_info, user_click)
-    #print recom_result["1"]
-    #debug_recomresult(recom_result, item_info)
+    # 这里是通过  相似商品的点击，召回相关商品
+    recom_result = cal_recom_result(sim_info, user_click)
+    print (recom_result["1"])
+    debug_recomresult(recom_result, item_info)
 
 if __name__ == "__main__":
     main_flow()
