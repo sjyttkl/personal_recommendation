@@ -1,8 +1,12 @@
 #-*-coding:utf8-*-
 """
-item cf main Algo
-author:zhiyuan
-date:2018****
+==================================================
+   File Name：     ana_train.data
+   email:         695492835@qq.com
+   Author :       sjyttkl
+   date：          2020/3/29
+   Description :  https://blog.csdn.net/u011263983/article/details/51498458
+==================================================
 """
 from __future__ import division
 import sys
