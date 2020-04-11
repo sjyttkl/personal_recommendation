@@ -10,7 +10,7 @@
 ==================================================
 """
 __author__ = 'songdongdong'
-
+import sys
 import numpy as np
 import xgboost as xgb
 import utils
@@ -168,6 +168,23 @@ def run_check_lr_gbdt(test_file, mix_tree_model_file, mix_lr_model_file, feature
 
 
 if __name__ == "__main__":
-    # run_check_xgb("../data/gbdt_test_file", "../data/gbdt.model", "../data/gbdt_feature_num", )
-    run_check_lr_gbdt("../data/gbdt_test_file","../data/xgb_mix_model", "../data/xgb_lr_coef_mix_model",
-                      "../data/gbdt_feature_num", )
+    # if len(sys.argv) == 4:
+    #     test_file = sys.argv[1]
+    #     tree_model = sys.argv[2]
+    #     feature_num_file = sys.argv[3]
+    #     run_check(test_file, tree_model, feature_num_file)
+    # elif len(sys.argv) == 5:
+    #     test_file = sys.argv[1]
+    #     tree_mix_model = sys.argv[2]
+    #     lr_coef_mix_model = sys.argv[3]
+    #     feature_num_file = sys.argv[4]
+    #     run_check_lr_gbdt(test_file, tree_mix_model, lr_coef_mix_model,  feature_num_file)
+    # else:
+    #     print ("check gbdt model usage: python xx.py test_file  tree_model feature_num_file")
+    #     print ("check lr_gbdt model usage: python xx.py test_file tree_mix_model lr_coef_mix_model feature_num_file")
+    #     sys.exit()
+
+
+    run_check_xgb("data/gbdt_test_file", "data/gbdt.model", "data/gbdt_feature_num", )
+    run_check_lr_gbdt("data/gbdt_test_file","data/xgb_mix_model", "data/xgb_lr_coef_mix_model",
+                      "data/gbdt_feature_num", )

@@ -45,9 +45,9 @@ def train_tree_model_core(train_mat, tree_depth, tree_num, learning_rate):
 def choose_parameter():
     """生成参数"""
     result_list = []
-    tree_depth_list = [4]  # [4,5,6]
-    tree_num_list = [10, ]  # [10,50,100]
-    learning_rate_list = [0.3, ]  # [0.3,,]
+    tree_depth_list = [4,5,6]  # [4,5,6]
+    tree_num_list = [10,50,100 ]  # [10,50,100]
+    learning_rate_list = [0.3,0.5,0.7 ]  # [0.3,,]
     for ele_tree_depth in tree_depth_list:
         for ele_tree_num in tree_num_list:
             for ele_learning_rate in learning_rate_list:
@@ -115,6 +115,15 @@ def get_gbdt_and_lr_featrue(tree_leaf,tree_num,tree_depth):
 
     return total_feature_list
 
+def get_mix_model_tree_info():
+    """
+    tree info of mix model
+    """
+    tree_depth = 4
+    tree_num = 10
+    step_size = 0.3
+    result = (tree_depth, tree_num, step_size)
+    return result
 
 def train_tree_and_lr_model(train_file, feature_num_file, mix_tree_model_file, mix_lr_model_file):
     """
@@ -128,7 +137,8 @@ def train_tree_and_lr_model(train_file, feature_num_file, mix_tree_model_file, m
 
     train_feature, train_label = get_train_data(train_file, feature_num_file)
     train_mat = xgb.DMatrix(train_feature, train_label)
-    tree_num, tree_depth, learning_rate = 10,6, 0.3
+    # tree_num, tree_depth, learning_rate = 10,6, 0.3
+    (tree_depth, tree_num, learning_rate) = get_mix_model_tree_info()
     # 这里树的深度由 6 改为4，原因：如下：  深度为6：总共：127个节点，64个叶子节点，63个非叶子节点
     # 1.训练出的label,没有落在叶子节点上（或者落在叶子节点上比较少）
     # 2. 特征与样本量的比值：1:100。 因为： 10颗数，深度为6，则叶子节点有 有640个维度，而样本有3万条，不满足
@@ -142,7 +152,7 @@ def train_tree_and_lr_model(train_file, feature_num_file, mix_tree_model_file, m
     total_feature_list = get_gbdt_and_lr_featrue(tree_leaf,tree_num,tree_depth)
 
     #逻辑回归
-    lr_clf = LRCV(Cs=[1.0], penalty="l2", tol=0.00001, max_iter=1000, cv=5, scoring='roc_auc').fit(total_feature_list,
+    lr_clf = LRCV(Cs=[1.0], penalty="l2", tol=0.00001, max_iter=500, cv=5, scoring='roc_auc').fit(total_feature_list,
                                                                                                 train_label)
     scores = lr_clf.scores_.values()
     scores = list(scores)[0]  # 提取values值
@@ -157,5 +167,22 @@ def train_tree_and_lr_model(train_file, feature_num_file, mix_tree_model_file, m
 
 
 if __name__ == "__main__":
-    # train_tree_model("../data/gbdt_train_file", "../data/gbdt_feature_num", "../data/gbdt.model")
+    # if len(sys.argv) == 4:
+    #     train_file = sys.argv[1]
+    #     feature_num_file = sys.argv[2]
+    #     tree_model = sys.argv[3]
+    #     train_tree_model(train_file, feature_num_file, tree_model)
+    # elif len(sys.argv) == 5:
+    #     train_file = sys.argv[1]
+    #     feature_num_file = sys.argv[2]
+    #     tree_mix_model = sys.argv[3]
+    #     lr_coef_mix_model = sys.argv[4]
+    #     train_tree_and_lr_model(train_file,  feature_num_file, tree_mix_model, lr_coef_mix_model)
+    # else:
+    #     print ("train gbdt model usage: python xx.py train_file feature_num_file tree_model")
+    #     print ("train lr_gbdt model usage: python xx.py train_file feature_num_file tree_mix_model lr_coef_mix_model")
+    #     sys.exit()
+
+
+    train_tree_model("../data/gbdt_train_file", "../data/gbdt_feature_num", "../data/gbdt.model")
     train_tree_and_lr_model("../data/gbdt_train_file", "../data/gbdt_feature_num", "../data/xgb_mix_model","../data/xgb_lr_coef_mix_model")

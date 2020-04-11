@@ -22,9 +22,9 @@ def get_input(input_train_file, input_test_file):
     use_list.remove(2)
     print(use_list)
 
-    train_data_df = pd.read_csv(input_train_file, sep=', ', header=0, dtype=dtype_dict, na_values="?", usecols=use_list)
+    train_data_df = pd.read_csv(input_train_file, sep=',', header=0, dtype=dtype_dict, na_values="?", usecols=use_list)
     train_data_df = train_data_df.dropna(axis=0, how="any")
-    test_data_df = pd.read_csv(input_test_file, sep=', ', header=0, dtype=dtype_dict, na_values="?", usecols=use_list)
+    test_data_df = pd.read_csv(input_test_file, sep=',', header=0, dtype=dtype_dict, na_values="?", usecols=use_list)
     test_data_df = test_data_df.dropna(axis=0, how="any")
     print(train_data_df.shape, test_data_df.shape)
     return train_data_df, test_data_df
@@ -41,8 +41,8 @@ def label_trans(x):
 
 def process_label_feature(label_feature_str, df_in):
     """处理label"""
-    df_in.loc[:, label_feature_str] = df_in.loc[:, "wage_class"].apply(label_trans)
-    df_in = df_in.drop(columns=['wage_class'], axis=1)
+    df_in.loc[:, label_feature_str] = df_in.loc[:, label_feature_str].apply(label_trans)
+    # df_in = df_in.drop(columns=['wage-class'], axis=1)
     return df_in
 
 
@@ -119,16 +119,17 @@ def process_con_feature(feature_str, df_train, df_test):
 
 def ana_train_data(input_trian_data, input_test_data, output_train_file, out_test_file, feature_num_file):
     train_data_df, test_data_df = get_input(input_trian_data, input_test_data)
-    train_data_df = process_label_feature("label", train_data_df)
-    test_data_df = process_label_feature("label", test_data_df)
+    label_feature_str = "label"
+    train_data_df = process_label_feature(label_feature_str, train_data_df)
+    test_data_df = process_label_feature(label_feature_str, test_data_df)
 
     # 特征的离散化
-    dis_feature_list = ['workclass', "education", "marital_status", "occupation", "relationship", "race", "sex",
-                        "native_country"]
-    con_feature_list = ['age', 'education_num', 'capital_gain', 'capital_loss', 'hours_per_week']
+    dis_feature_list = ['workclass', "education", "marital-status", "occupation", "relationship", "race", "sex",
+                        "native-country"]
+    con_feature_list = ['age', 'education-num', 'capital-gain', 'capital-loss', 'hours-per-week']
 
-    index_list = ["age", "workclass", "education", "education_num", "marital_status", "occupation", "relationship",
-                  "race", "sex", "capital_gain", "capital_loss", "hours_per_week", "native_country"]
+    index_list = ["age", "workclass", "education", "education-num", "marital-status", "occupation", "relationship",
+                  "race", "sex", "capital-gain", "capital-loss", "hours-per-week", "native-country"]
 
     dis_feature_num = 0  # 记录离散到多少维
     con_feature_num = 0  # 记录离散到多少维
@@ -144,7 +145,7 @@ def ana_train_data(input_trian_data, input_test_data, output_train_file, out_tes
 
     output_file(train_data_df, output_train_file)
     output_file(test_data_df, out_test_file)
-    with open("../data/" + feature_num_file, "w", encoding="utf-8") as file_w:
+    with open( feature_num_file, "w", encoding="utf-8") as file_w:
         file_w.write("feature_num=" + str(dis_feature_num + con_feature_num))
     print(dis_feature_num)
     print(con_feature_num)
@@ -212,11 +213,22 @@ def add(str_one, str_two):
 
 
 if __name__ == "__main__":
-    ana_train_data("../data/adult.data", "../data/adult.test", "../data/gbdt_train_file", "../data/gbdt_test_file",
-                   "../data/gbdt_feature_num")
+    # if len(sys.argv) < 6:
+    #     print ("usage: python xx.py origin_train origin_test train_file test_file feature_num_file")
+    #     sys.exit()
+    # else:
+    #     origin_train = sys.argv[1]
+    #     origin_test = sys.argv[2]
+    #     train_file = sys.argv[3]
+    #     test_file = sys.argv[4]
+    #     feature_num_file = sys.argv[5]
+    #     ana_train_data(origin_train, origin_test, train_file, test_file, feature_num_file)
+
+    ana_train_data("data/train.txt", "data/test.txt", "data/gbdt_train_file", "data/gbdt_test_file",
+                   "data/gbdt_feature_num")
 
     # 测试函数
-    with open("../data/gbdt_train_file", "r", encoding="utf-8") as file:
+    with open("data/gbdt_train_file", "r", encoding="utf-8") as file:
         count = 0
         for line in file.readlines():
             item = line.strip().split(",")
