@@ -6,7 +6,7 @@ date:2018****
 import os
 def get_user_click(rating_file):
     """
-    get user click list
+    返回两个列表：列表1：{user_id:[item_id_list]}, 列表2：{user_id_item_id: time}
     Args:
         rating_file:input file
     Return:
@@ -39,7 +39,7 @@ def get_user_click(rating_file):
 
 def  get_item_info(item_file):
     """
-    get item info[title, genres]
+    {item_id:[title,genreds]}
     Args:
         item_file:input iteminfo file
     Return:
